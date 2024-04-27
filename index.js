@@ -15,9 +15,25 @@ app.post("/user", (req, res) => {
     user.save().then(() => {
         res.send(user)
     }).catch(e => {
-        
-        res.send(e)
+        res.send(e).status(400)
     })  
+})
+
+app.get("/users", (req, res) => {
+    User.find({}).then((users) => {
+        res.send(users)
+    }).catch(e => res.send().status(500))
+})
+
+app.get("/users/:id/", (req, res) => {
+    const _id = req.params.id;
+
+    User.findById(_id).then((user) => {
+    res.send(user)
+}).catch(e => {
+    console.log(e);
+    res.status(404).send("not found")
+})
 })
 
 app.post("/task", (req, res) => {
