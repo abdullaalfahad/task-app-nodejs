@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json())
 
-app.post("/user", async (req, res) => {
+app.post("/users", async (req, res) => {
     const user = new User(req.body)
     
     try {
@@ -48,7 +48,32 @@ app.get("/users/:id/", async (req, res) => {
     }
 })
 
-app.post("/task", async (req, res) => {
+app.patch("/users/:id", async (req, res) => {
+    const id = req.params.id;
+
+    const updates = Object.keys(req.body);
+    const updatesFileds = ["name", "email", "password", "age"];
+    const isValidOperations = updates.every(update => updatesFileds.includes(update));
+
+    if(!isValidOperations) {
+        return res.send({error: "Invalid operations!"}).status(400)
+    }
+
+    try {
+        const user = await User.findByIdAndUpdate(id, req.body, {runValidators: true, new: true})
+
+        if(!user) {
+            return res.send().status(404)
+        }
+
+        res.send(user).status(200);
+
+    } catch(e) {
+        res.send().status(400)
+    }
+})
+
+app.post("/tasks", async (req, res) => {
     const task = new Task(req.body);
 
     task.save().then(() => {
