@@ -73,6 +73,31 @@ app.patch("/users/:id", async (req, res) => {
     }
 })
 
+app.patch("/tasks/:id", async(req, res) => {
+
+    const id = req.params.id;
+    const updates = Object.keys(req.body);
+    const updateFileds = ["description", "completed"];
+    const isValidOperations = updates.every((update) => updateFileds.includes(update));
+
+    if(!isValidOperations) {
+        return res.send({error: "Invalid operation!"}).status(400);
+    }
+
+    try {
+        const task = await Task.findByIdAndUpdate(id, req.body, {new: true})
+        
+        if(!task) {
+           return res.send().status(404)
+        }
+
+        res.send(task).status(200)
+
+    } catch(e) {
+        res.send().status(400)
+    }
+})
+
 app.post("/tasks", async (req, res) => {
     const task = new Task(req.body);
 
