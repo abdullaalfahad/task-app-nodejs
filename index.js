@@ -145,6 +145,22 @@ app.get("/tasks/:id/", (req, res) => {
     }).catch(e => res.status(500).send())
 })
 
+app.delete("/tasks/:id", async(req, res) => {
+    const id = req.params.id;
+
+    try {
+        const task = await Task.findByIdAndDelete(id)
+
+        if(!task) {
+            return res.send().status(400);
+        }
+
+        res.send(task).status(200);
+    } catch(e) {
+        res.send().status(500)
+    }
+})
+
 app.listen(port, () => {
     console.log("Server is runing on port "+ port);
 })
