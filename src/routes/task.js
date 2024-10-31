@@ -15,13 +15,12 @@ router.patch("/tasks/:id", async(req, res) => {
     }
 
     try {
-        const task = await Task.findByIdAndUpdate(id, req.body, {new: true})
-        
-        if(!task) {
-           return res.send().status(404)
-        }
+        const task = await Task.findById(id);
 
-        res.send(task).status(200)
+        updates.forEach((update) => task[update] = req.body[update]);
+        const updatedTask = await task.save();
+
+        res.send(updatedTask)
 
     } catch(e) {
         res.send().status(400)
