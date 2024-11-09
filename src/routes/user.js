@@ -29,6 +29,22 @@ router.post("/users/login", async (req, res) => {
     }
 })
 
+router.post("/users/logout", auth, async(req, res) => {
+    try {
+
+        console.log(req.user.tokens, req.token);
+        
+        req.user.tokens = req.user.tokens.filter(token => token.token !== req.token);
+        await req.user.save();
+
+        res.send().status(200)
+
+    } catch(e) {
+        res.send().status(500);
+    }
+
+})
+
 router.get("/users/me", auth, async (req, res) => {
     const user = req.user;
 
