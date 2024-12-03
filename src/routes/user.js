@@ -59,9 +59,7 @@ router.get("/users/me", auth, async (req, res) => {
    res.send(user).status(200);
 })
 
-router.patch("/users/:id", async (req, res) => {
-    const id = req.params.id;
-
+router.patch("/users/me", auth, async (req, res) => {
     const updates = Object.keys(req.body);
     const updatesFileds = ["name", "email", "password", "age"];
     const isValidOperations = updates.every(update => updatesFileds.includes(update));
@@ -71,7 +69,7 @@ router.patch("/users/:id", async (req, res) => {
     }
 
     try {
-        const user = await User.findById(id);
+        const user = req.user;
 
         updates.forEach((update) => user[update] = req.body[update]);
         const updatedUser = await user.save();
