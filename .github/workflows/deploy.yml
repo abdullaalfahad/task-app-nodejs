@@ -36,6 +36,6 @@ jobs:
         with:
           project: "abdullaalfa-whether-api-63"
           entrypoint: "index.js"
-          root: "task-app-nodejs"
+          root: ""
           
           
