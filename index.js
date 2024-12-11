@@ -1,8 +1,6 @@
 const express = require("express");
 require("./src/db/mongoose.js");
 
-const bcrypt = require("bcryptjs");
-
 const userRoute = require("./src/routes/user.js");
 const taskRoute = require("./src/routes/task.js")
 

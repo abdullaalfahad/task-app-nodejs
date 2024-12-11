@@ -4,7 +4,6 @@ const auth = require("../middleware/auth");
 
 const router = new express.Router();
 
-
 router.post("/users", async (req, res) => {
     const user = new User(req.body)
     
@@ -60,37 +59,32 @@ router.get("/users/me", auth, async (req, res) => {
 })
 
 router.patch("/users/me", auth, async (req, res) => {
-    const updates = Object.keys(req.body);
-    const updatesFileds = ["name", "email", "password", "age"];
-    const isValidOperations = updates.every(update => updatesFileds.includes(update));
-
-    if(!isValidOperations) {
-        return res.send({error: "Invalid operations!"}).status(400)
-    }
-
     try {
+        const updates = Object.keys(req.body);
+        const updatesFileds = ["name", "email", "password", "age"];
+        const isValidOperations = updates.every(update => updatesFileds.includes(update));
+    
+        if(!isValidOperations) {
+            return res.send({error: "Invalid operations!"}).status(400)
+        }
+
         const user = req.user;
 
         updates.forEach((update) => user[update] = req.body[update]);
         const updatedUser = await user.save();
 
         res.send(updatedUser)
+
     } catch(e) {
         res.send().status(400)
     }
 })
 
-router.delete("/users/:id", async(req, res) => {
-    const id = req.params.id;
-
+router.delete("/users/me", auth, async(req, res) => {
     try {
-        const user = await User.findByIdAndDelete(id)
+        await req.user.remove();
 
-        if(!user) {
-            return res.send().status(400);
-        }
-
-        res.send(user).status(200);
+        res.send(req.user).status(200);
     } catch(e) {
         res.send().status(500)
     }

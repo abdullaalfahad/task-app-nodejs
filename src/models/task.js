@@ -9,7 +9,12 @@ const Task = mongoose.model('tasks', {
     completed: {
         type: Boolean,
         default: false
-    },   
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: "users"
+    }   
 })
 
 module.exports = Task;
