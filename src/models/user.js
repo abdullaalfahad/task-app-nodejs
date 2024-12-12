@@ -48,10 +48,12 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }]
+}, {
+    timestamps: true
 })
 
 userSchema.virtual("tasks", {
-    ref: "tasks",
+    ref: "Tasks",
     localField: "_id",
     foreignField: "owner"
 })
@@ -105,6 +107,6 @@ userSchema.pre("save", async function(next) {
     next();
 })
 
-const User = mongoose.model('users', userSchema);
+const User = mongoose.model('Users', userSchema);
 
 module.exports = User
