@@ -124,4 +124,14 @@ router.post(
   }
 );
 
+router.delete("/users/avatar", auth, async (req, res) => {
+  try {
+    req.user.avatar = undefined;
+    await req.user.save();
+    res.status(200).send("avatar removed");
+  } catch (error) {
+    //
+  }
+});
+
 module.exports = router;
