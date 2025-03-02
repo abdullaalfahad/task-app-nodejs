@@ -11,6 +11,10 @@ app.use(express.json());
 app.use(userRoute);
 app.use(taskRoute);
 
+app.get("/", (req, res) => {
+  res.send("Deploy successfully");
+});
+
 app.listen(port, () => {
   console.log("Server is runing on port " + port);
 });
